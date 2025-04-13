@@ -21,7 +21,7 @@
 
 # После окончания сборки контейнера выполните: `docker-compose up -d`
 
-# Затем нужно применить миграции. Для этого выполните команду: `docker compose exec web alembic upgrade head`
+# Затем нужно применить миграции. Для этого выполните команду: `docker compose exec messenger alembic upgrade head`
 
 ### Теперь перейдите в браузере по адресу: `http://127.0.0.1:8000/docs#/`
 
