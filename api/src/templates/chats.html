@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Добро пожаловать {{username}}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 flex flex-col items-center justify-center min-h-screen p-4">
+<h1 class="text-3xl font-bold mb-6">Добро пожаловать {{username}}</h1>
+
+<div style="position: absolute; left: 200px; top: 100px">
+    {% if chats %}
+        Вот ваши чаты:
+        {% for chat, id in chats %}
+            <form action="/main_chats/join_chat" method="post" class="bg-white p-6 rounded-lg shadow-md w-full max-w-md ">
+                <input name="chat_id" class="hidden" type="number" value={{chat.id}}>
+                <input name="user_id" class="hidden" type="number" value={{id[0]}}>
+                {% for title in chat.title.split()%}
+                    {% if title != username.split()[0] %}
+                        <button type="submit" class="w-full bg-blue-500 text-white px-4 py-2 rounded-lg mt-4 hover:bg-blue-600">Написать {{title}}
+                            </button>
+                    {% endif %}
+                {% endfor %}
+            </form>
+        {% endfor %}
+    {% else %}
+        У вас пока нет ни одного начатого чата!
+    {% endif %}
+</div>
+<div>
+    Пользователи:
+        {% for user in users %}
+            <form action="/main_chats/join_chat" method="post" class="bg-white p-6 rounded-lg shadow-md w-full max-w-md">
+                <input name="user_auth" class="hidden" type="number" value={{user_id}}>
+                {% if chats %}
+                    {% if user.id in recipients %}
+                        {% for chat, id in chats %}
+                            {% if user.id == id[0] %}
+                                <input name="chat_id" class="hidden" type="number" value={{chat.id}}>
+                                <input name="user_id" class="hidden" type="number" value={{id[0]}}>
+                            {% endif %}
+                        {% endfor %}
+                    {% else %}
+                        <input name="chat_id" class="hidden" type="number" value=0>
+                        <input name="user_id" class="hidden" type="number" value={{user.id}}>
+                    {% endif %}
+                {% else %}
+                    <input name="chat_id" class="hidden" type="number" value=0>
+                    <input name="user_id" class="hidden" type="number" value={{user.id}}>
+                {% endif %}
+                <button type="submit" class="w-full bg-blue-500 text-white px-4 py-2 rounded-lg mt-4 hover:bg-blue-600">Начать чат с {{user.name}}
+                </button>
+            </form>
+        {% endfor %}
+</div>
+<div style="position: absolute; right: 200px; top: 100px">
+    {% if groups_users %}
+        Вот ваши группы:
+        {% for group, chat, ids in groups_users %}
+            <form action="/main_chats/join_chat" method="post" class="bg-white p-6 rounded-lg shadow-md w-full max-w-md ">
+                <input name="chat_id" class="hidden" type="number" value={{chat.id}}>
+                <input name="user_id" class="hidden" type="number" value={{user_id}}>
+                <button type="submit" class="w-full bg-blue-500 text-white px-4 py-2 rounded-lg mt-4 hover:bg-blue-600">Написать в группу: {{ group.title }}
+                    </button>
+            </form>
+        {% endfor %}
+    {% else %}
+        У вас пока нет ни одной группы!
+    {% endif %}
+    
+</div>
+<a href="/new_group">
+    <button type="submit" class="w-full bg-blue-500 text-white px-4 py-2 rounded-lg mt-4 hover:bg-blue-600">Создать группу
+    </button>
+</a>
+<div>
+    {% if all_groups %}
+        Группы в которые можно вступить:
+        {% for group, chat, ids in all_groups %}
+            {% if user_id not in ids %}
+                <form action="/add_in_group" method="post" class="bg-white p-6 rounded-lg shadow-md w-full max-w-md ">
+                    {{chat.id}}
+                    <input name="group_id" class="hidden" type="number" value={{group.id}}>
+                    <button type="submit" class="w-full bg-blue-500 text-white px-4 py-2 rounded-lg mt-4 hover:bg-blue-600">Вступить в группу: {{group.title}}
+                        </button>
+                </form>
+            {% endif %}
+        {% endfor %}
+    {% else %}
+        Пока нет ни одной группы, в которую можно вступить!
+    {% endif %}
+</div>
+</body>
+</html>

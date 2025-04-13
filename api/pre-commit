@@ -1,0 +1,9 @@
+#!/usr/bin/python3
+
+import os
+from datetime import datetime
+
+with open('src/.version', 'w') as fp:
+    fp.write(f'{datetime.now():%Y.%m%d.%H%M}')
+
+os.system('git add src/.version')

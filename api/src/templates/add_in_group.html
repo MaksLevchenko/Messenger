@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Добро пожаловать {{username}}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 flex flex-col items-center justify-center min-h-screen p-4">
+<h1 class="text-3xl font-bold mb-6">Добро пожаловать {{username}}</h1>
+
+<div>
+    {% if group %}
+        Вы успешно добавленны в группу {{ group.title }}:
+            <form action="/main_chats/join_chat" method="post" class="bg-white p-6 rounded-lg shadow-md w-full max-w-md ">
+                <input name="chat_id" class="hidden" type="number" value={{group.chat.id}}>
+                <input name="user_id" class="hidden" type="number" value={{user_id}}>
+                <button type="submit" class="w-full bg-blue-500 text-white px-4 py-2 rounded-lg mt-4 hover:bg-blue-600">Написать {{group.title}}
+                    </button>
+            </form>
+    {% else %}
+        Что-то пошло не так!
+    {% endif %}
+    
+</div>
+<a href="/new_group">
+    <button type="submit" class="w-full bg-blue-500 text-white px-4 py-2 rounded-lg mt-4 hover:bg-blue-600">Создать группу
+    </button>
+</a>
+</body>
+</html>

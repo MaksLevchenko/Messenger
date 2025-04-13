@@ -1,0 +1,42 @@
+services:
+  messenger:
+    build:
+      dockerfile:
+        Dockerfile
+      context: .
+    working_dir: "/src-MaksiGram/src"
+    volumes:
+      - .:/src
+
+    command: uvicorn main:app --reload --host 0.0.0.0 --port 8000
+    ports:
+      - 8000:8000
+    restart: always
+
+    depends_on:
+      - database
+    env_file: 
+      - local.env
+
+
+  database:
+    image: postgres:14.6-alpine
+    
+    # volumes:
+    #   - postgres_data:/var/lib/postgresql/data
+    restart: always
+    container_name: MaksiGram-db
+    
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${PG_PASSWORD} 
+      POSTGRES_DB: ${PG_DB}
+      POSTGRES_HOST: database
+    env_file: .env
+    
+    expose:
+      - 5432
+
+
+# volumes:
+#   postgres_data:
